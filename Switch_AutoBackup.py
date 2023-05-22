@@ -55,14 +55,20 @@ class TelnetClient():
         return data
 
 
-def switchbak(host_ip, command1, command2, command3):
+def switchbak(host_ip, command1, command2, command3, command4, command5):
     telnet_client = TelnetClient()
 
     # Login to the telnet using the provided host IP
     if telnet_client.login_host(host_ip):
+        
         telnet_client.execute_some_command(command1)  # Execute the first command
         telnet_client.execute_some_command(command2)  # Execute the second command
+
+        time.sleep(5) # Waits 5 seconds for the command to be executed
         telnet_client.execute_some_command(command3)  # Execute the third command
+
+        telnet_client.execute_some_command(command4)  # Execute the fourth command
+        telnet_client.execute_some_command(command5)  # Execute the fifth command
 
         # Logout from the telnet
         telnet_client.logout_host()
@@ -81,8 +87,10 @@ if __name__ == '__main__':
         command1 = 'save config.cfg'
         command2 = 'y'
         command3 = 'tftp ' + ftphost + ' put flash:/config.cfg ' + filename
+        command4 = 'save'
+        command5 = 'y'
 
-        p.apply_async(switchbak, args=(ip, command1, command2, command3))
+        p.apply_async(switchbak, args=(ip, command1, command2, command3, command4, command5,))
 
     p.close()
     p.join()
